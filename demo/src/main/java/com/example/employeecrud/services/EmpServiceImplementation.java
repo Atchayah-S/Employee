@@ -1,10 +1,13 @@
 package com.example.employeecrud.services;
 
+import com.example.employeecrud.dao.Department;
 import com.example.employeecrud.dao.Employees;
 import com.example.employeecrud.dto.EmployeeDto;
-import com.example.employeecrud.exceptions.EmployeeNotFouncException;
+import com.example.employeecrud.exceptions.DepartmentNotFoundException;
+import com.example.employeecrud.exceptions.EmployeeNotFoundException;
 import com.example.employeecrud.exceptions.InvalidDataException;
 import com.example.employeecrud.mapper.EmployeeMapper;
+import com.example.employeecrud.repository.DepartmentRepo;
 import com.example.employeecrud.repository.EmployeesRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,15 +22,30 @@ import static com.example.employeecrud.mapper.EmployeeMapper.EmployeesToEmployee
 public class EmpServiceImplementation implements EmpService{
     @Autowired
     private EmployeesRepo emprepo;
+    @Autowired
+    private DepartmentRepo departmentRepo;
     @Override
-    public EmployeeDto CreateEmployee(Employees employee) {
-        String error= validateData(employee,emprepo,null);
-        if(!error.isEmpty())
-            throw new InvalidDataException(error);
 
-        Employees emp=emprepo.save(employee);
+
+    public EmployeeDto CreateEmployee(Employees employee) {
+        Department dept = null;
+
+        if (employee.getDepartment() != null && employee.getDepartment().getDeptID() != 0) {
+            dept = departmentRepo.findById(employee.getDepartment().getDeptID())
+                    .orElseThrow(() -> new DepartmentNotFoundException(
+                            "Department does not exist with id: " + employee.getDepartment().getDeptID()));
+        }
+
+        employee.setDepartment(dept);
+        String error = validateData(employee, emprepo, null);
+        if (!error.isEmpty()) {
+            throw new InvalidDataException(error);
+        }
+
+        Employees emp = emprepo.save(employee);
         return EmployeesToEmployeeDto(emp);
     }
+
 
     public List<EmployeeDto> addAllEmployees(List<Employees> employeesList){
         ArrayList<String> Errors=new ArrayList<>();
@@ -46,31 +64,37 @@ public class EmpServiceImplementation implements EmpService{
     public EmployeeDto FetchById(Long id){
         Employees emp=emprepo.findById(id).orElse(null);
         if(emp==null){
-            throw new EmployeeNotFouncException("No Employee with id:"+id+" found");
+            throw new EmployeeNotFoundException("No Employee with id:"+id+" found");
         }
         return EmployeesToEmployeeDto(emp);
     }
 
-    public EmployeeDto updateEmployee(Long id,Employees updatedData){
+    public EmployeeDto updateEmployee(Long id, Employees updatedData){
         Employees existingData=emprepo.findById(id).orElse(null);
         if(existingData!=null){
             existingData.setName(updatedData.getName());
             existingData.setEmail(updatedData.getEmail());
             existingData.setPhone(updatedData.getPhone());
             existingData.setPassword(updatedData.getPassword());
+            if(updatedData.getDepartment()!=null && updatedData.getDepartment().getDeptID()!=0){
+                Department dept=departmentRepo.findById(updatedData.getDepartment().getDeptID())
+                        .orElseThrow(()->new DepartmentNotFoundException("Department not exists with id: "));
+            existingData.setDepartment(dept);
+            }
             String error= validateData(existingData,emprepo,String.valueOf(existingData.getEmp_id()));
             if(!error.isEmpty())
                 throw new InvalidDataException(error);
             emprepo.save(existingData);
         }
-        assert existingData != null;
+        if(existingData==null)
+            throw new EmployeeNotFoundException("Employee with id: "+id+" not found");
         return EmployeesToEmployeeDto(existingData);
     }
 
     public String deleteEmployee(Long id){
         Employees emp=emprepo.findById(id).orElse(null);
         if(emp==null){
-            throw new EmployeeNotFouncException("No Employee with id:"+id+" found");
+            throw new EmployeeNotFoundException("No Employee with id:"+id+" found");
         }
         emprepo.deleteById(id);
         return "Employee deleted successfully";

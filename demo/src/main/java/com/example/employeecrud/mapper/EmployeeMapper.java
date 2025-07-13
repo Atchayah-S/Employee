@@ -1,5 +1,6 @@
 package com.example.employeecrud.mapper;
 
+import com.example.employeecrud.dao.Department;
 import com.example.employeecrud.dao.Employees;
 import com.example.employeecrud.dto.EmployeeDto;
 
@@ -12,6 +13,7 @@ public class EmployeeMapper {
         empdto.setName(employee.getName());
         empdto.setPhone(employee.getPhone());
         empdto.setEmail(employee.getEmail());
+        empdto.setDepartment(DepartmentMapper.toDepartmentDto(employee.getDepartment()));
         return empdto;
     }
     public static List<EmployeeDto> EmployeesToEmployeeDtoList(List<Employees> employeesList) {

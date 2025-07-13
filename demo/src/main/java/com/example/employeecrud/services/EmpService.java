@@ -10,6 +10,6 @@ public interface EmpService {
    List<EmployeeDto> addAllEmployees(List<Employees> employeesList);
    EmployeeDto FetchById(Long id);
    String deleteEmployee(Long id);
-   EmployeeDto updateEmployee(Long id,Employees updatedData);
+   EmployeeDto updateEmployee(Long id, Employees updatedData);
    List<EmployeeDto> fetchAllEmployee();
 }

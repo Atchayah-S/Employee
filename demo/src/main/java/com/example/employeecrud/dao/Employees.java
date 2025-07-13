@@ -1,10 +1,10 @@
 package com.example.employeecrud.dao;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Entity
 @Data
@@ -16,4 +16,8 @@ public class Employees {
     private String email;
     private String phone;
     private String password;
+    @ManyToOne
+    @JoinColumn(name = "deptID",referencedColumnName = "deptID")
+    @JsonBackReference
+    private Department department;
 }

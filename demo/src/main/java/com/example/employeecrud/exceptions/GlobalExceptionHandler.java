@@ -7,11 +7,15 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(InvalidDataException.class)
-    public ResponseEntity<String> handleCustomException(InvalidDataException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<String> handleCustomException(InvalidDataException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
-    @ExceptionHandler(EmployeeNotFouncException.class)
-    public ResponseEntity<String> handleNotFoundException(EmployeeNotFouncException e){
+    @ExceptionHandler(EmployeeNotFoundException.class)
+    public ResponseEntity<String> handleNotFoundException(EmployeeNotFoundException e){
+        return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+    }
+    @ExceptionHandler(DepartmentNotFoundException.class)
+    public ResponseEntity<String> handleDeptNotFoundException(DepartmentNotFoundException e){
         return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
     }
 }

@@ -1,6 +1,8 @@
 package com.example.employeecrud.utitlity;
 
+import com.example.employeecrud.dao.Department;
 import com.example.employeecrud.dao.Employees;
+import com.example.employeecrud.repository.DepartmentRepo;
 import com.example.employeecrud.repository.EmployeesRepo;
 
 import java.util.regex.Pattern;
@@ -30,5 +32,8 @@ public class DataValidation {
         error= employee.getPassword().length()<8 ?
                 error+"Password is required and must atleast be of length 8\n":error;
         return error;
+    }
+    public static String validateDepartment(DepartmentRepo departmentRepo,String deptName){
+        return departmentRepo.existsByDeptName(deptName)?"Department already exists":null;
     }
 }
