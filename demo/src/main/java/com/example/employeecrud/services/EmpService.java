@@ -12,4 +12,5 @@ public interface EmpService {
    String deleteEmployee(Long id);
    EmployeeDto updateEmployee(Long id, Employees updatedData);
    List<EmployeeDto> fetchAllEmployee();
+   EmployeeDto assignProject(Long empId,Long projId);
 }

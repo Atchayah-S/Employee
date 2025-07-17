@@ -2,12 +2,15 @@ package com.example.employeecrud.dao;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
 
 @Entity
-@Data
+@Getter @Setter
 public class Employees {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,4 +23,12 @@ public class Employees {
     @JoinColumn(name = "deptID",referencedColumnName = "deptID")
     @JsonBackReference
     private Department department;
+
+    @OneToOne(mappedBy = "employee",cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private EmployeeProfile employeeProfile;
+    @ManyToMany
+    @JoinTable(name = "Employee-Project", joinColumns = @JoinColumn(name = "emp_id"),inverseJoinColumns = @JoinColumn(name = "projId"))
+    @JsonIgnore
+    private List<Project> projects;
 }

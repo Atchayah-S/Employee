@@ -14,6 +14,8 @@ public class EmployeeMapper {
         empdto.setPhone(employee.getPhone());
         empdto.setEmail(employee.getEmail());
         empdto.setDepartment(DepartmentMapper.toDepartmentDto(employee.getDepartment()));
+       empdto.setProfile(ProfileMapper.toProfileDto(employee.getEmployeeProfile()));
+       empdto.setProject(ProjectMapper.toProjectDtoList(employee.getProjects()));
         return empdto;
     }
     public static List<EmployeeDto> EmployeesToEmployeeDtoList(List<Employees> employeesList) {

@@ -49,4 +49,9 @@ public class EmployeesController {
     public String deleteEmployee(@PathVariable long id){
         return empSer.deleteEmployee(id);
     }
+
+    @PutMapping("/assignProject/{projId}/toEmployee/{empId}")
+    public EmployeeDto assignProject(@PathVariable long empId,@PathVariable long projId){
+        return empSer.assignProject(empId,projId);
+    }
 }
