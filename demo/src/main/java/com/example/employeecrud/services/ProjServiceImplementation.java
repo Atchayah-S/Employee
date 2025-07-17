@@ -1,5 +1,6 @@
 package com.example.employeecrud.services;
 
+import com.example.employeecrud.dao.Employees;
 import com.example.employeecrud.dao.Project;
 import com.example.employeecrud.exceptions.ResourceNotFoundException;
 import com.example.employeecrud.repository.ProjectRepo;
@@ -30,8 +31,11 @@ public class ProjServiceImplementation implements ProjService{
 
     @Override
     public String deleteProject(Long projId) {
-        if(!projectRepo.existsByProjId(projId))
-            throw new ResourceNotFoundException("Project "+projId+" not found");
+        Project project=projectRepo.findById(projId).orElseThrow(()->new ResourceNotFoundException("Project "+projId+" not found"));
+        List<Employees> employeesList=project.getEmployeesList();
+        for(Employees emp:employeesList){
+            emp.getProjects().remove(project);
+        }
         projectRepo.deleteById(projId);
         return "Deleted Successfully";
     }
