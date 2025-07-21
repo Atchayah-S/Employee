@@ -1,6 +1,5 @@
 package com.example.employeecrud.mapper;
 
-import com.example.employeecrud.dao.Department;
 import com.example.employeecrud.dao.Employees;
 import com.example.employeecrud.dto.EmployeeDto;
 
@@ -13,9 +12,15 @@ public class EmployeeMapper {
         empdto.setName(employee.getName());
         empdto.setPhone(employee.getPhone());
         empdto.setEmail(employee.getEmail());
-        empdto.setDepartment(DepartmentMapper.toDepartmentDto(employee.getDepartment()));
-       empdto.setProfile(ProfileMapper.toProfileDto(employee.getEmployeeProfile()));
-       empdto.setProject(ProjectMapper.toProjectDtoList(employee.getProjects()));
+        if(employee.getDepartment()!=null){
+        empdto.setDepartment(DepartmentMapper.toDepartmentDto(employee.getDepartment()));}
+        if(employee.getEmployeeProfile()!=null){
+       empdto.setProfile(ProfileMapper.toProfileDto(employee.getEmployeeProfile()));}
+        if(!employee.getAddressList().isEmpty()){
+            empdto.setAddress(AddressMapper.toAddressDtoList(employee.getAddressList()));
+        }
+       if(employee.getProjects()!=null){
+       empdto.setProject(ProjectMapper.toProjectDtoList(employee.getProjects()));}
         return empdto;
     }
     public static List<EmployeeDto> EmployeesToEmployeeDtoList(List<Employees> employeesList) {

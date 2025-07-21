@@ -1,9 +1,6 @@
 package com.example.employeecrud.dto;
 
-import com.example.employeecrud.dao.Department;
-import com.example.employeecrud.dao.EmployeeProfile;
-import com.example.employeecrud.dao.Project;
-import lombok.Data;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,4 +15,5 @@ public class EmployeeDto {
     private DepartmentDto department;
    private ProfileDto profile;
    private List<ProjectDto> project;
+   private List<AddressDto> address;
 }

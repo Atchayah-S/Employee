@@ -31,4 +31,6 @@ public class Employees {
     @JoinTable(name = "Employee-Project", joinColumns = @JoinColumn(name = "emp_id"),inverseJoinColumns = @JoinColumn(name = "projId"))
     @JsonIgnore
     private List<Project> projects;
+    @OneToMany(mappedBy = "employee",cascade = CascadeType.ALL)
+    private List<Address>   addressList;
 }

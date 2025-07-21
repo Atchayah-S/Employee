@@ -1,17 +1,14 @@
 package com.example.employeecrud.services;
 
-import com.example.employeecrud.dao.Department;
-import com.example.employeecrud.dao.EmployeeProfile;
-import com.example.employeecrud.dao.Employees;
-import com.example.employeecrud.dao.Project;
+import com.example.employeecrud.dao.*;
 import com.example.employeecrud.dto.EmployeeDto;
 import com.example.employeecrud.exceptions.DepartmentNotFoundException;
 import com.example.employeecrud.exceptions.EmployeeNotFoundException;
 import com.example.employeecrud.exceptions.InvalidDataException;
 import com.example.employeecrud.exceptions.ResourceNotFoundException;
 import com.example.employeecrud.mapper.EmployeeMapper;
+import com.example.employeecrud.repository.AddressRepo;
 import com.example.employeecrud.repository.DepartmentRepo;
-import com.example.employeecrud.repository.EmployeeProfileRepo;
 import com.example.employeecrud.repository.EmployeesRepo;
 import com.example.employeecrud.repository.ProjectRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +30,8 @@ public class EmpServiceImplementation implements EmpService{
     private EmpProfileService empProfileService;
     @Autowired
     private ProjectRepo projectRepo;
-
+    @Autowired
+    private AddressRepo addressRepo;
     @Override
     public EmployeeDto CreateEmployee(Employees employee) {
         Department dept = null;
@@ -49,9 +47,15 @@ public class EmpServiceImplementation implements EmpService{
         if (!error.isEmpty()) {
             throw new InvalidDataException(error);
         }
+        if(!employee.getAddressList().isEmpty()){
+            for(Address address:employee.getAddressList()){
+                address.setEmployee(employee);
+            }
+        }
         Employees emp = emprepo.save(employee);
         if(employee.getEmployeeProfile()!=null){
         empProfileService.saveProfile(emp.getEmp_id(), employee.getEmployeeProfile());}
+
         return EmployeesToEmployeeDto(emp);
     }
 
@@ -64,7 +68,7 @@ public class EmpServiceImplementation implements EmpService{
                 Errors.add("Error found in record: "+(i+1)+"\n"+error+"\n");
             else{
                 Department dept=null;
-                Long id=employeesList.get(i).getDepartment().getDeptID();
+                long id=employeesList.get(i).getDepartment().getDeptID();
                 if (employeesList.get(i).getDepartment() != null && id != 0) {
                     dept = departmentRepo.findById(id)
                             .orElseThrow(() -> new DepartmentNotFoundException(
@@ -77,10 +81,17 @@ public class EmpServiceImplementation implements EmpService{
         if(!Errors.isEmpty()){
             throw new InvalidDataException(Errors.toString());
         }
+        for(Employees employee: employeesList) {
+            if (!employee.getAddressList().isEmpty()) {
+                for (Address address : employee.getAddressList()) {
+                    address.setEmployee(employee);
+                }
+            }
+        }
         List<Employees> savedList=emprepo.saveAll(employeesList);
-        for(int i=0;i<savedList.size();i++){
-            if(savedList.get(i).getEmployeeProfile()!=null){
-                empProfileService.saveProfile(savedList.get(i).getEmp_id(),savedList.get(i).getEmployeeProfile());
+        for (Employees employees : savedList) {
+            if (employees.getEmployeeProfile() != null) {
+                empProfileService.saveProfile(employees.getEmp_id(), employees.getEmployeeProfile());
             }
         }
         return EmployeeMapper.EmployeesToEmployeeDtoList(employeesList);
@@ -109,12 +120,27 @@ public class EmpServiceImplementation implements EmpService{
             String error= validateData(existingData,emprepo,String.valueOf(existingData.getEmp_id()));
             if(!error.isEmpty())
                 throw new InvalidDataException(error);
+            List<Address> addressList=updatedData.getAddressList();
+            for(Address updatedAddress:addressList){
+                Address existingAddress=addressRepo.findById(updatedAddress.getId()).orElse(null);
+                if(existingAddress==null){
+                    updatedAddress.setEmployee(existingData);
+                    existingData.getAddressList().add(updatedAddress);}
+                else{
+                    existingAddress.setStreetName(updatedAddress.getStreetName());
+                    existingAddress.setDoorNo(updatedAddress.getDoorNo());
+                    existingAddress.setCity(updatedAddress.getCity());
+                    existingAddress.setZipCode(updatedAddress.getZipCode());
+                }
+            }
+
             emprepo.save(existingData);
         }
         if(existingData==null)
             throw new EmployeeNotFoundException("Employee with id: "+id+" not found");
         return EmployeesToEmployeeDto(existingData);
     }
+
 
     public String deleteEmployee(Long id){
         Employees emp=emprepo.findById(id).orElse(null);
