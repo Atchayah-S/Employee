@@ -33,4 +33,7 @@ public class Employees {
     private List<Project> projects;
     @OneToMany(mappedBy = "employee",cascade = CascadeType.ALL)
     private List<Address>   addressList;
+    @OneToOne(mappedBy = "employee",cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private SalaryInfo salaryInfo;
 }

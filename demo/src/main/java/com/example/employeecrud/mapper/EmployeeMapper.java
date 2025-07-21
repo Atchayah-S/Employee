@@ -21,6 +21,9 @@ public class EmployeeMapper {
         }
        if(employee.getProjects()!=null){
        empdto.setProject(ProjectMapper.toProjectDtoList(employee.getProjects()));}
+       if(employee.getSalaryInfo()!=null){
+           empdto.setSalaryInfoDto(SalaryInfoMapper.toSalaryInfoDto(employee.getSalaryInfo()));
+       }
         return empdto;
     }
     public static List<EmployeeDto> EmployeesToEmployeeDtoList(List<Employees> employeesList) {

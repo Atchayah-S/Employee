@@ -1,5 +1,8 @@
 package com.example.employeecrud.dao;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -15,5 +18,6 @@ public class Address {
     private int zipCode;
     @ManyToOne
     @JoinColumn(name = "empId", referencedColumnName = "emp_id")
+    @JsonIgnore
     private Employees employee;
 }

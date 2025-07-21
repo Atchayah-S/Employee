@@ -16,4 +16,5 @@ public class EmployeeDto {
    private ProfileDto profile;
    private List<ProjectDto> project;
    private List<AddressDto> address;
+   private SalaryInfoDto salaryInfoDto;
 }
