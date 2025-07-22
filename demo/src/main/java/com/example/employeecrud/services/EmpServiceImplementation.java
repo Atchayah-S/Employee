@@ -7,10 +7,7 @@ import com.example.employeecrud.exceptions.EmployeeNotFoundException;
 import com.example.employeecrud.exceptions.InvalidDataException;
 import com.example.employeecrud.exceptions.ResourceNotFoundException;
 import com.example.employeecrud.mapper.EmployeeMapper;
-import com.example.employeecrud.repository.AddressRepo;
-import com.example.employeecrud.repository.DepartmentRepo;
-import com.example.employeecrud.repository.EmployeesRepo;
-import com.example.employeecrud.repository.ProjectRepo;
+import com.example.employeecrud.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +29,8 @@ public class EmpServiceImplementation implements EmpService{
     private ProjectRepo projectRepo;
     @Autowired
     private AddressRepo addressRepo;
+    @Autowired
+    private SalaryInfoService salaryInfoService;
     @Override
     public EmployeeDto CreateEmployee(Employees employee) {
         Department dept = null;
@@ -55,6 +54,9 @@ public class EmpServiceImplementation implements EmpService{
         Employees emp = emprepo.save(employee);
         if(employee.getEmployeeProfile()!=null){
         empProfileService.saveProfile(emp.getEmp_id(), employee.getEmployeeProfile());}
+        if(employee.getSalaryInfo()!=null){
+            salaryInfoService.addSalaryInfo(emp.getEmp_id(),employee.getSalaryInfo());
+        }
 
         return EmployeesToEmployeeDto(emp);
     }
@@ -86,12 +88,15 @@ public class EmpServiceImplementation implements EmpService{
                 for (Address address : employee.getAddressList()) {
                     address.setEmployee(employee);
                 }
-            }
+                }
         }
         List<Employees> savedList=emprepo.saveAll(employeesList);
         for (Employees employees : savedList) {
             if (employees.getEmployeeProfile() != null) {
                 empProfileService.saveProfile(employees.getEmp_id(), employees.getEmployeeProfile());
+            }
+            if(employees.getSalaryInfo()!=null){
+                salaryInfoService.addSalaryInfo(employees.getEmp_id(),employees.getSalaryInfo());
             }
         }
         return EmployeeMapper.EmployeesToEmployeeDtoList(employeesList);
@@ -120,6 +125,7 @@ public class EmpServiceImplementation implements EmpService{
             String error= validateData(existingData,emprepo,String.valueOf(existingData.getEmp_id()));
             if(!error.isEmpty())
                 throw new InvalidDataException(error);
+            if(updatedData.getAddressList()!=null){
             List<Address> addressList=updatedData.getAddressList();
             for(Address updatedAddress:addressList){
                 Address existingAddress=addressRepo.findById(updatedAddress.getId()).orElse(null);
@@ -132,8 +138,13 @@ public class EmpServiceImplementation implements EmpService{
                     existingAddress.setCity(updatedAddress.getCity());
                     existingAddress.setZipCode(updatedAddress.getZipCode());
                 }
+            }}
+            if (updatedData.getEmployeeProfile()!=null){
+                empProfileService.updateEmployeeProfile(existingData.getEmployeeProfile().getProfileId(), updatedData.getEmployeeProfile());
             }
-
+            if(updatedData.getSalaryInfo()!=null){
+                salaryInfoService.updateSalaryInfo(id,updatedData.getSalaryInfo());
+            }
             emprepo.save(existingData);
         }
         if(existingData==null)
