@@ -8,7 +8,6 @@ import com.example.employeecrud.exceptions.ResourceNotFoundException;
 import com.example.employeecrud.mapper.SalaryInfoMapper;
 import com.example.employeecrud.repository.EmployeesRepo;
 import com.example.employeecrud.repository.SalaryInfoRepo;
-import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
