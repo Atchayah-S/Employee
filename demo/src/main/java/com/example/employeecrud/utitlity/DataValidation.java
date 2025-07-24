@@ -2,6 +2,7 @@ package com.example.employeecrud.utitlity;
 
 import com.example.employeecrud.dao.Department;
 import com.example.employeecrud.dao.Employees;
+import com.example.employeecrud.exceptions.ResourceNotFoundException;
 import com.example.employeecrud.repository.DepartmentRepo;
 import com.example.employeecrud.repository.EmployeesRepo;
 
@@ -20,7 +21,8 @@ public class DataValidation {
                 error+"Invalid Email address\n":error;
         error=employee.getEmail()==null?
                 error+"Email is required\n":error;
-        Employees existing= emprepo.findByEmail(employee.getEmail());
+        Employees existing= emprepo.findByEmail(employee.getEmail())
+                .orElseThrow(()->new ResourceNotFoundException("email: "+employee.getEmail()+" not found"));
         error=existing != null && !String.valueOf(existing.getEmp_id()).equals(id)?
         error+"Email id already exists\n":error;
 

@@ -9,6 +9,7 @@ import com.example.employeecrud.exceptions.ResourceNotFoundException;
 import com.example.employeecrud.mapper.EmployeeMapper;
 import com.example.employeecrud.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -31,6 +32,8 @@ public class EmpServiceImplementation implements EmpService{
     private AddressRepo addressRepo;
     @Autowired
     private SalaryInfoService salaryInfoService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Override
     public EmployeeDto CreateEmployee(Employees employee) {
         Department dept = null;
@@ -46,6 +49,7 @@ public class EmpServiceImplementation implements EmpService{
         if (!error.isEmpty()) {
             throw new InvalidDataException(error);
         }
+        employee.setPassword(passwordEncoder.encode(employee.getPassword()));
         if(!employee.getAddressList().isEmpty()){
             for(Address address:employee.getAddressList()){
                 address.setEmployee(employee);
@@ -84,6 +88,7 @@ public class EmpServiceImplementation implements EmpService{
             throw new InvalidDataException(Errors.toString());
         }
         for(Employees employee: employeesList) {
+            employee.setPassword(passwordEncoder.encode(employee.getPassword()));
             if (!employee.getAddressList().isEmpty()) {
                 for (Address address : employee.getAddressList()) {
                     address.setEmployee(employee);
@@ -116,7 +121,7 @@ public class EmpServiceImplementation implements EmpService{
             existingData.setName(updatedData.getName());
             existingData.setEmail(updatedData.getEmail());
             existingData.setPhone(updatedData.getPhone());
-            existingData.setPassword(updatedData.getPassword());
+            existingData.setPassword(passwordEncoder.encode(updatedData.getPassword()));
             if(updatedData.getDepartment()!=null && updatedData.getDepartment().getDeptID()!=0){
                 Department dept=departmentRepo.findById(updatedData.getDepartment().getDeptID())
                         .orElseThrow(()->new DepartmentNotFoundException("Department not exists with id: "));
