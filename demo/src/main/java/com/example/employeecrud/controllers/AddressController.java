@@ -1,8 +1,10 @@
 package com.example.employeecrud.controllers;
 
+import com.example.employeecrud.Security.JwtUtils;
 import com.example.employeecrud.dao.Address;
 import com.example.employeecrud.dto.AddressDto;
 import com.example.employeecrud.services.AddressService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,17 +16,25 @@ import java.util.List;
 @RequestMapping("/api/Address")
 public class AddressController {
     @Autowired
+    private JwtUtils jwtUtils;
+    @Autowired
     private AddressService addressService;
-    @PostMapping("/addAddress/employee/{empId}")
-    public AddressDto addAddress(@PathVariable long empId,@RequestBody Address address){
+    @PostMapping("/addAddress")
+    public AddressDto addAddress(HttpServletRequest request, @RequestBody Address address){
+        String authHeader = request.getHeader("Authorization");
+        String token = authHeader.substring(7);
+        long empId=jwtUtils.extractEmployeeId(token);
         return addressService.addAddress(empId,address);
     }
     @PutMapping("/updateAddress/{id}")
     public AddressDto updateAddress(@PathVariable long id,@RequestBody Address address){
         return addressService.updateAddress(id,address);
     }
-    @GetMapping("/fetchAddress/Employee/{empId}")
-    public List<AddressDto> fetchAddressByEmp(@PathVariable long empId){
+    @GetMapping("/fetchAddress/Employee")
+    public List<AddressDto> fetchAddressByEmp(HttpServletRequest request){
+        String authHeader = request.getHeader("Authorization");
+        String token = authHeader.substring(7);
+        long empId=jwtUtils.extractEmployeeId(token);
         return addressService.fetchAddressByEmpId(empId);
     }
     @GetMapping("/fetchAddress/Address/{id}")

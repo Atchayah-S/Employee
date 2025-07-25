@@ -28,7 +28,8 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         http.authorizeHttpRequests(authz->
                 authz.requestMatchers("/api/Address/**").authenticated()
-                        .requestMatchers("/hashPassword").permitAll()
+                        .requestMatchers("/api/Employee/**").authenticated()
+                        .requestMatchers("/").permitAll()
                         .anyRequest().permitAll()
         ).formLogin(form->form.permitAll().defaultSuccessUrl("/"))
     .httpBasic(Customizer->{})

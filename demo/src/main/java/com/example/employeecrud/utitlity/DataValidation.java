@@ -21,6 +21,7 @@ public class DataValidation {
                 error+"Invalid Email address\n":error;
         error=employee.getEmail()==null?
                 error+"Email is required\n":error;
+        System.out.println(employee.getEmail());
         Employees existing= emprepo.findByEmail(employee.getEmail())
                 .orElseThrow(()->new ResourceNotFoundException("email: "+employee.getEmail()+" not found"));
         error=existing != null && !String.valueOf(existing.getEmp_id()).equals(id)?
