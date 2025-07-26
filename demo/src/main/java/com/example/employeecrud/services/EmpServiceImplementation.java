@@ -2,8 +2,6 @@ package com.example.employeecrud.services;
 
 import com.example.employeecrud.dao.*;
 import com.example.employeecrud.dto.EmployeeDto;
-import com.example.employeecrud.exceptions.DepartmentNotFoundException;
-import com.example.employeecrud.exceptions.EmployeeNotFoundException;
 import com.example.employeecrud.exceptions.InvalidDataException;
 import com.example.employeecrud.exceptions.ResourceNotFoundException;
 import com.example.employeecrud.mapper.EmployeeMapper;
@@ -40,7 +38,7 @@ public class EmpServiceImplementation implements EmpService{
 
         if (employee.getDepartment() != null && employee.getDepartment().getDeptID() != 0) {
             dept = departmentRepo.findById(employee.getDepartment().getDeptID())
-                    .orElseThrow(() -> new DepartmentNotFoundException(
+                    .orElseThrow(() -> new ResourceNotFoundException(
                             "Department does not exist with id: " + employee.getDepartment().getDeptID()));
         }
 
@@ -50,7 +48,8 @@ public class EmpServiceImplementation implements EmpService{
             throw new InvalidDataException(error);
         }
         employee.setPassword(passwordEncoder.encode(employee.getPassword()));
-        if(!employee.getAddressList().isEmpty()){
+
+        if(employee.getAddressList()!=null){
             for(Address address:employee.getAddressList()){
                 address.setEmployee(employee);
             }
@@ -77,7 +76,7 @@ public class EmpServiceImplementation implements EmpService{
                 long id=employeesList.get(i).getDepartment().getDeptID();
                 if (employeesList.get(i).getDepartment() != null && id != 0) {
                     dept = departmentRepo.findById(id)
-                            .orElseThrow(() -> new DepartmentNotFoundException(
+                            .orElseThrow(() -> new ResourceNotFoundException(
                                     "Department does not exist with id: " + id));
                 }
 
@@ -110,7 +109,7 @@ public class EmpServiceImplementation implements EmpService{
     public EmployeeDto FetchById(Long id){
         Employees emp=emprepo.findById(id).orElse(null);
         if(emp==null){
-            throw new EmployeeNotFoundException("No Employee with id:"+id+" found");
+            throw new ResourceNotFoundException("No Employee with id:"+id+" found");
         }
         return EmployeesToEmployeeDto(emp);
     }
@@ -124,7 +123,7 @@ public class EmpServiceImplementation implements EmpService{
             existingData.setPassword(passwordEncoder.encode(updatedData.getPassword()));
             if(updatedData.getDepartment()!=null && updatedData.getDepartment().getDeptID()!=0){
                 Department dept=departmentRepo.findById(updatedData.getDepartment().getDeptID())
-                        .orElseThrow(()->new DepartmentNotFoundException("Department not exists with id: "));
+                        .orElseThrow(()->new ResourceNotFoundException("Department not exists with id: "));
             existingData.setDepartment(dept);
             }
             String error= validateData(existingData,emprepo,String.valueOf(existingData.getEmp_id()));
@@ -153,7 +152,7 @@ public class EmpServiceImplementation implements EmpService{
             emprepo.save(existingData);
         }
         if(existingData==null)
-            throw new EmployeeNotFoundException("Employee with id: "+id+" not found");
+            throw new ResourceNotFoundException("Employee with id: "+id+" not found");
         return EmployeesToEmployeeDto(existingData);
     }
 
@@ -161,7 +160,7 @@ public class EmpServiceImplementation implements EmpService{
     public String deleteEmployee(Long id){
         Employees emp=emprepo.findById(id).orElse(null);
         if(emp==null){
-            throw new EmployeeNotFoundException("No Employee with id:"+id+" found");
+            throw new ResourceNotFoundException("No Employee with id:"+id+" found");
         }
         emprepo.deleteById(id);
         return "Employee deleted successfully";
@@ -175,7 +174,7 @@ public class EmpServiceImplementation implements EmpService{
     @Override
     public EmployeeDto assignProject(Long empId,Long projId){
         Employees employee=emprepo.findById(empId).
-                orElseThrow(()->new EmployeeNotFoundException("Employee with id: "+empId+" not found"));
+                orElseThrow(()->new ResourceNotFoundException("Employee with id: "+empId+" not found"));
         Project project=projectRepo.findById(projId).orElseThrow(()->new ResourceNotFoundException("Project with id: "+projId+" not found"));
         employee.getProjects().add(project);
         project.getEmployeesList().add(employee);

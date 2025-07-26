@@ -3,7 +3,6 @@ package com.example.employeecrud.services;
 import com.example.employeecrud.dao.EmployeeProfile;
 import com.example.employeecrud.dao.Employees;
 import com.example.employeecrud.dto.ProfileDto;
-import com.example.employeecrud.exceptions.EmployeeNotFoundException;
 import com.example.employeecrud.exceptions.ResourceNotFoundException;
 import com.example.employeecrud.mapper.ProfileMapper;
 import com.example.employeecrud.repository.EmployeeProfileRepo;
@@ -20,7 +19,7 @@ public class EmpProfileServiceImplementation implements EmpProfileService{
     @Autowired
     EmployeesRepo employeesRepo;
     public ProfileDto saveProfile(Long empId,EmployeeProfile employeeProfile){
-        Employees employee=employeesRepo.findById(empId).orElseThrow(()->new EmployeeNotFoundException("Employee id not found"));
+        Employees employee=employeesRepo.findById(empId).orElseThrow(()->new ResourceNotFoundException("Employee id not found"));
         employeeProfile.setEmployee(employee);
      return ProfileMapper.toProfileDto(profileRepo.save(employeeProfile));
     }

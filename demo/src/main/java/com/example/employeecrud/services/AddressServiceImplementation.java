@@ -3,7 +3,7 @@ package com.example.employeecrud.services;
 import com.example.employeecrud.dao.Address;
 import com.example.employeecrud.dao.Employees;
 import com.example.employeecrud.dto.AddressDto;
-import com.example.employeecrud.exceptions.EmployeeNotFoundException;
+
 import com.example.employeecrud.exceptions.ResourceNotFoundException;
 import com.example.employeecrud.mapper.AddressMapper;
 import com.example.employeecrud.repository.AddressRepo;
@@ -22,7 +22,7 @@ public class AddressServiceImplementation implements AddressService{
     @Override
     public List<AddressDto> fetchAddressByEmpId(Long empId) {
         Employees employee=employeesRepo.findById(empId).
-                orElseThrow(()->new EmployeeNotFoundException("no employee found with id "+empId));
+                orElseThrow(()->new ResourceNotFoundException("no employee found with id "+empId));
         List<Address> address=employee.getAddressList();
         return AddressMapper.toAddressDtoList(address);
     }
@@ -53,7 +53,7 @@ public class AddressServiceImplementation implements AddressService{
     @Override
     public AddressDto addAddress(Long empId,Address address) {
         Employees employee=employeesRepo.findById(empId).
-                orElseThrow(()->new EmployeeNotFoundException("No employee found with id: "+empId));
+                orElseThrow(()->new ResourceNotFoundException("No employee found with id: "+empId));
         address.setEmployee(employee);
         return AddressMapper.toAddressDto(addressRepo.save(address));
     }

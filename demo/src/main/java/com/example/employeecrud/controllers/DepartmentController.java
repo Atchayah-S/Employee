@@ -1,6 +1,7 @@
 package com.example.employeecrud.controllers;
 
 import com.example.employeecrud.dao.Department;
+import com.example.employeecrud.dto.GenericResponseEntity;
 import com.example.employeecrud.exceptions.InvalidDataException;
 import com.example.employeecrud.repository.DepartmentRepo;
 import com.example.employeecrud.services.DeptService;
@@ -18,15 +19,19 @@ public class DepartmentController {
     private DeptService deptService;
 
     @PostMapping("/addDepartment")
-    public Department addDepartment(@RequestBody Department department){
+    public GenericResponseEntity<Department> addDepartment(@RequestBody Department department){
         if(DataValidation.validateDepartment(deptRepo,department.getDeptName())!=null)
             throw new InvalidDataException("Department "+department.getDeptName()+" Already exists");
-        return deptService.saveDepartment(department);
+        return GenericResponseEntity.<Department>builder()
+                .message("Department added successfully")
+                .data(deptService.saveDepartment(department))
+                .success(true)
+                .build();
     }
 
 
     @PostMapping("Department/addAll")
-    public List<Department> addAllDepartment(@RequestBody List<Department> departmentList){
+    public GenericResponseEntity<List<Department>> addAllDepartment(@RequestBody List<Department> departmentList){
         String existingDepartments="";
         for (Department department:departmentList){
             String error=DataValidation.validateDepartment(deptRepo,department.getDeptName());
@@ -34,29 +39,54 @@ public class DepartmentController {
         }
         if (existingDepartments!=null)
             throw new InvalidDataException(existingDepartments+" departments already exists");
-        return deptService.saveAllDepartments(departmentList);
+        return GenericResponseEntity.<List<Department>>builder()
+                .message("All department added successfully")
+                .data(deptService.saveAllDepartments(departmentList))
+                .success(true)
+                .build();
+
     }
 
     @GetMapping("Department/fetchAll")
-    public List<Department> fetchAllDepartments(){
-        return deptService.getAllDepartments();
+    public GenericResponseEntity<List<Department>> fetchAllDepartments(){
+        return GenericResponseEntity.<List<Department>>builder()
+                .message("All department added successfully")
+                .data(deptService.getAllDepartments())
+                .success(true)
+                .build();
+
     }
 
     @PutMapping("updateDepartment/{id}")
-    public Department updateDepartment(@PathVariable Long id,@RequestBody Department updatedData){
+    public GenericResponseEntity<Department> updateDepartment(@PathVariable Long id,@RequestBody Department updatedData){
         Department existingData=deptRepo.findById(id).orElse(null);
         if(existingData!=null){
         existingData.setDeptName(updatedData.getDeptName());}
-        return deptService.saveDepartment(existingData);
+        return GenericResponseEntity.<Department>builder()
+                .message("Department details updated successfully")
+                .data(deptService.saveDepartment(existingData))
+                .success(true)
+                .build();
+
     }
 
     @GetMapping("/fetchById/{id}")
-    public Department getDepartment(@PathVariable Long id){
-        return deptService.findDepartment(id);
+    public GenericResponseEntity<Department> getDepartment(@PathVariable Long id){
+        return GenericResponseEntity.<Department>builder()
+                .message("Department fetched successfully")
+                .data(deptService.findDepartment(id))
+                .success(true)
+                .build();
+
     }
 
     @DeleteMapping("/deleteDepartment/{id}")
-    public String deleteDepartment(@PathVariable Long id){
-        return deptService.deleteDepartment(id);
+    public GenericResponseEntity<String> deleteDepartment(@PathVariable Long id){
+        return GenericResponseEntity.<String>builder()
+                .message(deptService.deleteDepartment(id))
+                .data(null)
+                .success(true)
+                .build();
+
     }
 }

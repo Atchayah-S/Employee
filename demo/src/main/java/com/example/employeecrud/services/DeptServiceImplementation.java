@@ -1,7 +1,7 @@
 package com.example.employeecrud.services;
 
 import com.example.employeecrud.dao.Department;
-import com.example.employeecrud.exceptions.DepartmentNotFoundException;
+import com.example.employeecrud.exceptions.ResourceNotFoundException;
 import com.example.employeecrud.repository.DepartmentRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ public class DeptServiceImplementation implements DeptService{
     }
 
     public Department findDepartment(Long id){
-     return departmentRepo.findById(id).orElseThrow(()-> new DepartmentNotFoundException("Department with id: "+id+" not found"));
+     return departmentRepo.findById(id).orElseThrow(()-> new ResourceNotFoundException("Department with id: "+id+" not found"));
     }
 
     public String deleteDepartment(Long id){

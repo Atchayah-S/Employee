@@ -16,7 +16,7 @@ public class EmployeeMapper {
         empdto.setDepartment(DepartmentMapper.toDepartmentDto(employee.getDepartment()));}
         if(employee.getEmployeeProfile()!=null){
        empdto.setProfile(ProfileMapper.toProfileDto(employee.getEmployeeProfile()));}
-        if(!employee.getAddressList().isEmpty()){
+        if(employee.getAddressList()!=null){
             empdto.setAddress(AddressMapper.toAddressDtoList(employee.getAddressList()));
         }
        if(employee.getProjects()!=null){

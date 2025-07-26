@@ -3,11 +3,11 @@ package com.example.employeecrud.controllers;
 import com.example.employeecrud.Security.JwtUtils;
 import com.example.employeecrud.dao.Employees;
 import com.example.employeecrud.dto.EmployeeDto;
+import com.example.employeecrud.dto.GenericResponseEntity;
 import com.example.employeecrud.repository.EmployeesRepo;
 import com.example.employeecrud.services.EmpServiceImplementation;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,49 +22,81 @@ public class EmployeesController {
     @Autowired
     private JwtUtils jwtUtils;
     @PostMapping("/addEmployee")
-    public ResponseEntity<EmployeeDto> createEmployee(@RequestBody Employees employee){
+    public GenericResponseEntity<EmployeeDto> createEmployee(@RequestBody Employees employee){
     EmployeeDto info=empSer.CreateEmployee(employee);
 
-    return ResponseEntity.ok(info);
+        return GenericResponseEntity.<EmployeeDto>builder()
+                .message("Employee Added successfully")
+                .data(info)
+                .success(true)
+                .build();
     }
 
     @GetMapping("/fetchall")
-    public List<EmployeeDto> getAllEmployees(){
-        return empSer.fetchAllEmployee();
+    public GenericResponseEntity<List<EmployeeDto>> getAllEmployees(){
+
+        return  GenericResponseEntity.<List<EmployeeDto>>builder()
+                .message("All Employees Fetched Successfully")
+                .data(empSer.fetchAllEmployee())
+                .success(true)
+                .build();
     }
 
     @GetMapping("/fetchEmpById")
-    public EmployeeDto getEmployeeById(HttpServletRequest request){
+    public GenericResponseEntity<EmployeeDto> getEmployeeById(HttpServletRequest request){
         String authHeader = request.getHeader("Authorization");
         String token = authHeader.substring(7);
         long id=jwtUtils.extractEmployeeId(token);
-        return empSer.FetchById(id);
+        return GenericResponseEntity.<EmployeeDto>builder()
+                .message("Employee fetched successfully")
+                .data(empSer.FetchById(id))
+                .success(true)
+                .build();
+
     }
 
     @PostMapping("/addAll")
-    public List<EmployeeDto> addAllEmployees(@RequestBody List<Employees> employeesList){
-
-        return empSer.addAllEmployees(employeesList);
+    public GenericResponseEntity<List<EmployeeDto>> addAllEmployees(@RequestBody List<Employees> employeesList){
+        List<EmployeeDto> employeeDtoList=empSer.addAllEmployees(employeesList);
+        return GenericResponseEntity.<List<EmployeeDto>>builder()
+                .message("All Employees added Successfully")
+                .data(employeeDtoList)
+                .success(true)
+                .build();
     }
 
     @PutMapping("/update")
-    public EmployeeDto update(@RequestBody Employees updatedData, HttpServletRequest request){
+    public GenericResponseEntity<EmployeeDto> update(@RequestBody Employees updatedData, HttpServletRequest request){
         String authHeader = request.getHeader("Authorization");
         String token = authHeader.substring(7);
         long id=jwtUtils.extractEmployeeId(token);
-        return empSer.updateEmployee(id,updatedData);
+        return GenericResponseEntity.<EmployeeDto>builder()
+                .message("Employee information updated Successfully")
+                .data(empSer.updateEmployee(id,updatedData))
+                .success(true)
+                .build();
+
     }
 
     @DeleteMapping("/del/{id}")
-    public String deleteEmployee(@PathVariable long id){
-        return empSer.deleteEmployee(id);
+    public GenericResponseEntity<String> deleteEmployee(@PathVariable long id){
+        return GenericResponseEntity.<String>builder()
+                .message(empSer.deleteEmployee(id))
+                .data(null)
+                .success(true)
+                .build();
     }
 
     @PutMapping("/assignProject/{projId}")
-    public EmployeeDto assignProject(HttpServletRequest request,@PathVariable long projId){
+    public GenericResponseEntity<EmployeeDto> assignProject(HttpServletRequest request, @PathVariable long projId){
         String authHeader = request.getHeader("Authorization");
         String token = authHeader.substring(7);
         long empId=jwtUtils.extractEmployeeId(token);
-        return empSer.assignProject(empId,projId);
+
+        return GenericResponseEntity.<EmployeeDto>builder()
+                .message("Project Assigned Successfully")
+                .data(empSer.assignProject(empId,projId))
+                .success(true)
+                .build();
     }
 }
