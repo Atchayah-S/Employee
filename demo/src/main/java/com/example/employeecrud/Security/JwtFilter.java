@@ -57,15 +57,15 @@ public class JwtFilter extends OncePerRequestFilter {
 
             }
         } catch (Exception e) {
-            Map<String, String> responseMap = new HashMap<>();
-            responseMap.put("error", "Invalid Token");
-
-            ObjectMapper objectMapper = new ObjectMapper();
-            String jsonString = objectMapper.writeValueAsString(responseMap);
-
-
-            response.getWriter().write(jsonString);
+            Map<String, Object> responseMap = new HashMap<>();
+            responseMap.put("message", "Invalid Token");
+            responseMap.put("data", null);
+            responseMap.put("status Code",401);
+            responseMap.put("status", "UNAUTHORIZED");
+            responseMap.put("success", false);
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            new ObjectMapper().writeValue(response.getWriter(), responseMap);
             return;
         }
 
