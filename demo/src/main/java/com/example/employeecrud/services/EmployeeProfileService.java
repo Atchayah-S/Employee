@@ -5,7 +5,7 @@ import com.example.employeecrud.dto.ProfileDto;
 
 import java.util.List;
 
-public interface EmpProfileService {
+public interface EmployeeProfileService {
     public ProfileDto saveProfile(Long empId,EmployeeProfile employeeProfile);
     public ProfileDto getProfile(Long id);
     public List<ProfileDto> getAllProfile();

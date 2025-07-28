@@ -22,6 +22,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
+    private final String TOKEN_GENERATED_SUCCESSFULLY="Token generated successfully";
+    private final String TOKEN_NOT_GENERATED="Token not generated";
+    private final String TOKEN_NOT_REFRESHED="Token not refreshed";
     @Autowired
     private EmployeesRepo employeesRepo;
     @Autowired
@@ -44,7 +47,7 @@ public class AuthController {
             String refreshToken = jwtUtil.generateRefreshToken(userDetails);
             response.setStatus(HttpServletResponse.SC_CREATED);
             return GenericResponseEntity.<Map<String,String>>builder()
-                    .message("Tokens generated successfully")
+                    .message(TOKEN_GENERATED_SUCCESSFULLY)
                     .data(Map.of(
                             "accessToken", token,
                             "refreshToken", refreshToken))
@@ -76,7 +79,7 @@ public class AuthController {
                 String newAccessToken = jwtUtil.generateJwtToken(userDetails, emp);
                 response.setStatus(HttpServletResponse.SC_CREATED);
                 return GenericResponseEntity.<Map<String,String>>builder()
-                        .message("Token generated successfully")
+                        .message(TOKEN_GENERATED_SUCCESSFULLY)
                         .data(Map.of("accessToken", newAccessToken))
                         .statusCode(201)
                         .status(HttpStatus.CREATED)
@@ -86,7 +89,7 @@ public class AuthController {
             else {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return GenericResponseEntity.<Map<String,String>>builder()
-                        .message("Token not generated")
+                        .message(TOKEN_NOT_GENERATED)
                         .data(Map.of("error", "Invalid refresh token"))
                         .statusCode(401)
                         .status(HttpStatus.UNAUTHORIZED)
@@ -97,7 +100,7 @@ public class AuthController {
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return GenericResponseEntity.<Map<String,String>>builder()
-                    .message("Tokens not refreshed")
+                    .message(TOKEN_NOT_REFRESHED)
                     .data(Map.of("error", "Token refresh failed"))
                     .statusCode(401)
                     .status(HttpStatus.UNAUTHORIZED)

@@ -4,7 +4,7 @@ import com.example.employeecrud.dao.Project;
 
 import java.util.List;
 
-public interface ProjService {
+public interface ProjectService {
     public Project createProject(Project project);
     public Project updateProject(Long projId,Project updatedProject);
     public String deleteProject(Long projId);

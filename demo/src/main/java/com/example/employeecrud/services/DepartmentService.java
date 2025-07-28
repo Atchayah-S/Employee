@@ -7,7 +7,7 @@ import com.example.employeecrud.dao.Department;
 import java.util.List;
 
 
-public interface DeptService {
+public interface DepartmentService {
     public Department saveDepartment(Department department);
     public List<Department> getAllDepartments();
     public String deleteDepartment(Long id);

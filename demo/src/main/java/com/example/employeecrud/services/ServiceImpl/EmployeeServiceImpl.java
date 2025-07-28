@@ -1,4 +1,4 @@
-package com.example.employeecrud.services;
+package com.example.employeecrud.services.ServiceImpl;
 
 import com.example.employeecrud.dao.*;
 import com.example.employeecrud.dto.EmployeeDto;
@@ -6,6 +6,9 @@ import com.example.employeecrud.exceptions.InvalidDataException;
 import com.example.employeecrud.exceptions.ResourceNotFoundException;
 import com.example.employeecrud.mapper.EmployeeMapper;
 import com.example.employeecrud.repository.*;
+import com.example.employeecrud.services.EmployeeProfileService;
+import com.example.employeecrud.services.EmployeeService;
+import com.example.employeecrud.services.SalaryInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,13 +20,13 @@ import static com.example.employeecrud.utitlity.DataValidation.*;
 import static com.example.employeecrud.mapper.EmployeeMapper.EmployeesToEmployeeDto;
 
 @Service
-public class EmpServiceImplementation implements EmpService{
+public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
     private EmployeesRepo emprepo;
     @Autowired
     private DepartmentRepo departmentRepo;
     @Autowired
-    private EmpProfileService empProfileService;
+    private EmployeeProfileService empProfileService;
     @Autowired
     private ProjectRepo projectRepo;
     @Autowired

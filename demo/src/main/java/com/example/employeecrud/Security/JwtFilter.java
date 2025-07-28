@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.example.employeecrud.services.CustomUserDetailService;
+import com.example.employeecrud.services.ServiceImpl.CustomUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,6 +23,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
+    private final String INVALID_TOKEN="Invalid Token";
     @Autowired
     private JwtUtils jwtUtil;
 
@@ -58,7 +59,7 @@ public class JwtFilter extends OncePerRequestFilter {
             }
         } catch (Exception e) {
             Map<String, Object> responseMap = new HashMap<>();
-            responseMap.put("message", "Invalid Token");
+            responseMap.put("message", INVALID_TOKEN);
             responseMap.put("data", null);
             responseMap.put("status Code",401);
             responseMap.put("status", "UNAUTHORIZED");

@@ -1,4 +1,4 @@
-package com.example.employeecrud.services;
+package com.example.employeecrud.services.ServiceImpl;
 
 import com.example.employeecrud.dao.Address;
 import com.example.employeecrud.dao.Employees;
@@ -8,13 +8,14 @@ import com.example.employeecrud.exceptions.ResourceNotFoundException;
 import com.example.employeecrud.mapper.AddressMapper;
 import com.example.employeecrud.repository.AddressRepo;
 import com.example.employeecrud.repository.EmployeesRepo;
+import com.example.employeecrud.services.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class AddressServiceImplementation implements AddressService{
+public class AddressServiceImpl implements AddressService {
     @Autowired
     private EmployeesRepo employeesRepo;
     @Autowired

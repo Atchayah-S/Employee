@@ -5,7 +5,7 @@ import com.example.employeecrud.dao.Employees;
 import com.example.employeecrud.dto.EmployeeDto;
 import com.example.employeecrud.dto.GenericResponseEntity;
 import com.example.employeecrud.repository.EmployeesRepo;
-import com.example.employeecrud.services.EmpServiceImplementation;
+import com.example.employeecrud.services.ServiceImpl.EmployeeServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,10 +16,16 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/Employee")
 public class EmployeesController {
+    private final String EMPLOYEE_ADDED_SUCCESSFULLY="Employee Added successfully";
+    private final String EMPLOYEES_ADDED_SUCCESSFULLY="Employees Added successfully";
+    private final String EMPLOYEE_FETCHED_SUCCESSFULLY="Employee fetched successfully";
+    private final String EMPLOYEES_FETCHED_SUCCESSFULLY="Employee fetched successfully";
+    private final String EMPLOYEE_UPDATED_SUCCESSFULLY="Employee updated successfully";
+    private final String PROJECT_ASSIGNED_SUCCESSFULLY="Project assigned successfully";
     @Autowired
     private EmployeesRepo emprepo;
     @Autowired
-    private EmpServiceImplementation empSer;
+    private EmployeeServiceImpl empSer;
     @Autowired
     private JwtUtils jwtUtils;
     @PostMapping
@@ -28,7 +34,7 @@ public class EmployeesController {
     EmployeeDto info=empSer.CreateEmployee(employee);
 
         return GenericResponseEntity.<EmployeeDto>builder()
-                .message("Employee Added successfully")
+                .message(EMPLOYEE_ADDED_SUCCESSFULLY)
                 .data(info)
                 .statusCode(201)
                 .status(HttpStatus.CREATED)
@@ -40,7 +46,7 @@ public class EmployeesController {
     public GenericResponseEntity<List<EmployeeDto>> getAllEmployees(){
 
         return  GenericResponseEntity.<List<EmployeeDto>>builder()
-                .message("All Employees Fetched Successfully")
+                .message(EMPLOYEES_FETCHED_SUCCESSFULLY)
                 .data(empSer.fetchAllEmployee())
                 .statusCode(200)
                 .status(HttpStatus.OK)
@@ -54,7 +60,7 @@ public class EmployeesController {
         String token = authHeader.substring(7);
         long id=jwtUtils.extractEmployeeId(token);
         return GenericResponseEntity.<EmployeeDto>builder()
-                .message("Employee fetched successfully")
+                .message(EMPLOYEE_FETCHED_SUCCESSFULLY)
                 .data(empSer.FetchById(id))
                 .statusCode(200)
                 .status(HttpStatus.OK)
@@ -62,13 +68,12 @@ public class EmployeesController {
                 .build();
 
     }
-
-    @PostMapping("/addAll")
+    @PostMapping("/all")
     @ResponseStatus(HttpStatus.CREATED)
     public GenericResponseEntity<List<EmployeeDto>> addAllEmployees(@RequestBody List<Employees> employeesList){
         List<EmployeeDto> employeeDtoList=empSer.addAllEmployees(employeesList);
         return GenericResponseEntity.<List<EmployeeDto>>builder()
-                .message("All Employees added Successfully")
+                .message(EMPLOYEES_ADDED_SUCCESSFULLY)
                 .data(employeeDtoList)
                 .statusCode(201)
                 .status(HttpStatus.CREATED)
@@ -82,7 +87,7 @@ public class EmployeesController {
         String token = authHeader.substring(7);
         long id=jwtUtils.extractEmployeeId(token);
         return GenericResponseEntity.<EmployeeDto>builder()
-                .message("Employee information updated Successfully")
+                .message(EMPLOYEE_UPDATED_SUCCESSFULLY)
                 .data(empSer.updateEmployee(id,updatedData))
                 .statusCode(200)
                 .status(HttpStatus.OK)
@@ -91,8 +96,11 @@ public class EmployeesController {
 
     }
 
-    @DeleteMapping("/{id}")
-    public GenericResponseEntity<String> deleteEmployee(@PathVariable long id){
+    @DeleteMapping
+    public GenericResponseEntity<String> deleteEmployee(HttpServletRequest request){
+        String authHeader = request.getHeader("Authorization");
+        String token = authHeader.substring(7);
+        long id=jwtUtils.extractEmployeeId(token);
         return GenericResponseEntity.<String>builder()
                 .message(empSer.deleteEmployee(id))
                 .data(null)
@@ -110,7 +118,7 @@ public class EmployeesController {
         long empId=jwtUtils.extractEmployeeId(token);
 
         return GenericResponseEntity.<EmployeeDto>builder()
-                .message("Project Assigned Successfully")
+                .message(PROJECT_ASSIGNED_SUCCESSFULLY)
                 .data(empSer.assignProject(empId,projId))
                 .status(HttpStatus.CREATED)
                 .statusCode(201)

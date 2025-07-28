@@ -17,6 +17,10 @@ import java.util.List;
 @Data
 @RequestMapping("/api/Address")
 public class AddressController {
+    private final String ADDRESS_ADDED_SUCCESSFULLY="Address Added successfully";
+    private final String ADDRESS_FETCHED_SUCCESSFULLY="Address fetched successfully";
+    private final String ADDRESS_UPDATED_SUCCESSFULLY="Address updated successfully";
+    private final String ADDRESS_DELETED_SUCCESSFULLY="Address Deleted Successfully";
     @Autowired
     private JwtUtils jwtUtils;
     @Autowired
@@ -28,7 +32,7 @@ public class AddressController {
         String token = authHeader.substring(7);
         long empId=jwtUtils.extractEmployeeId(token);
         return GenericResponseEntity.<AddressDto>builder()
-                .message("Address created successfully")
+                .message(ADDRESS_ADDED_SUCCESSFULLY)
                 .data(addressService.addAddress(empId,address))
                 .statusCode(201)
                 .status(HttpStatus.CREATED)
@@ -38,7 +42,7 @@ public class AddressController {
     @PutMapping("/{id}")
     public GenericResponseEntity<AddressDto> updateAddress(@PathVariable long id,@RequestBody Address address){
         return GenericResponseEntity.<AddressDto>builder()
-                .message("Address updated successfully")
+                .message(ADDRESS_UPDATED_SUCCESSFULLY)
                 .data(addressService.updateAddress(id,address))
                 .statusCode(200)
                 .status(HttpStatus.OK)
@@ -52,7 +56,7 @@ public class AddressController {
         String token = authHeader.substring(7);
         long empId=jwtUtils.extractEmployeeId(token);
         return GenericResponseEntity.<List<AddressDto>>builder()
-                .message("Address fetched successfully")
+                .message(ADDRESS_FETCHED_SUCCESSFULLY)
                 .data(addressService.fetchAddressByEmpId(empId))
                 .statusCode(200)
                 .status(HttpStatus.OK)
@@ -63,7 +67,7 @@ public class AddressController {
     @GetMapping("/{id}")
     public GenericResponseEntity<Address> fetchAddress(@PathVariable long id){
         return GenericResponseEntity.<Address>builder()
-                .message("Address fetched successfully")
+                .message(ADDRESS_FETCHED_SUCCESSFULLY)
                 .data(addressService.fetchAddressById(id))
                 .statusCode(200)
                 .status(HttpStatus.OK)
@@ -74,12 +78,11 @@ public class AddressController {
     public GenericResponseEntity<String> deleteAddress(@PathVariable long id){
         addressService.deleteAddress(id);
         return GenericResponseEntity.<String>builder()
-                .message("Address Deleted Successfully")
+                .message(ADDRESS_DELETED_SUCCESSFULLY)
                 .data(null)
                 .statusCode(200)
                 .status(HttpStatus.OK)
                 .success(false)
                 .build();
-
     }
 }

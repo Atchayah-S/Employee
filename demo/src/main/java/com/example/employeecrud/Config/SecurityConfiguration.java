@@ -1,7 +1,7 @@
 package com.example.employeecrud.Config;
 
 import com.example.employeecrud.Security.JwtFilter;
-import com.example.employeecrud.services.CustomUserDetailService;
+import com.example.employeecrud.services.ServiceImpl.CustomUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

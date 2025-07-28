@@ -5,7 +5,7 @@ import com.example.employeecrud.dto.EmployeeDto;
 
 import java.util.List;
 
-public interface EmpService {
+public interface EmployeeService {
    EmployeeDto CreateEmployee(Employees employee);
    List<EmployeeDto> addAllEmployees(List<Employees> employeesList);
    EmployeeDto FetchById(Long id);

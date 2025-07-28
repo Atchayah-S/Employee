@@ -1,4 +1,4 @@
-package com.example.employeecrud.services;
+package com.example.employeecrud.services.ServiceImpl;
 
 import com.example.employeecrud.dao.Employees;
 import com.example.employeecrud.exceptions.ResourceNotFoundException;
