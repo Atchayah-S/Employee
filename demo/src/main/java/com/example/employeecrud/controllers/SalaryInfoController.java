@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/salaryInfo")
 public class SalaryInfoController {
-    private final String SALARY_INFO_ADDED_SUCCESSFULLY="Salary Info Added successfully";
-    private final String SALARY_INFO_FETCHED_SUCCESSFULLY="Salary Info fetched successfully";
-    private final String SALARY_INFO_UPDATED_SUCCESSFULLY="Salary Info updated successfully";
+    public final String SALARY_INFO_ADDED_SUCCESSFULLY="Salary Info Added successfully";
+    public final String SALARY_INFO_FETCHED_SUCCESSFULLY="Salary Info fetched successfully";
+    public final String SALARY_INFO_UPDATED_SUCCESSFULLY="Salary Info updated successfully";
     @Autowired
     private SalaryInfoService salaryInfoService;
     @PostMapping("/{empId}")

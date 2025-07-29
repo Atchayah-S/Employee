@@ -13,9 +13,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/EmployeeProfile")
 public class EmployeeProfileController {
-    private final String PROFILE_ADDED_SUCCESSFULLY="Employee Profile Added successfully";
-    private final String PROFILE_FETCHED_SUCCESSFULLY="Employee Profile fetched successfully";
-    private final String PROFILE_UPDATED_SUCCESSFULLY="Employee Profile updated successfully";
+    public final String PROFILE_ADDED_SUCCESSFULLY="Employee Profile Added successfully";
+    public final String PROFILE_FETCHED_SUCCESSFULLY="Employee Profile fetched successfully";
+    public final String PROFILE_UPDATED_SUCCESSFULLY="Employee Profile updated successfully";
     @Autowired
     private EmployeeProfileService employeeProfileService;
     @PostMapping("/{id}")

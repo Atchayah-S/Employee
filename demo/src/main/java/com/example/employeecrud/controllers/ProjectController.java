@@ -12,11 +12,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/project")
 public class ProjectController {
-    private final String PROJECT_ADDED_SUCCESSFULLY="Project Added successfully";
+    public final String PROJECT_ADDED_SUCCESSFULLY="Project Added successfully";
 
-    private final String PROJECT_FETCHED_SUCCESSFULLY="Project fetched successfully";
-    private final String PROJECTS_FETCHED_SUCCESSFULLY="Projects fetched successfully";
-    private final String PROJECT_UPDATED_SUCCESSFULLY="Project updated successfully";
+    public final String PROJECT_FETCHED_SUCCESSFULLY="Project fetched successfully";
+    public final String PROJECTS_FETCHED_SUCCESSFULLY="Projects fetched successfully";
+    public final String PROJECT_UPDATED_SUCCESSFULLY="Project updated successfully";
     @Autowired
     ProjectService projService;
     @PostMapping

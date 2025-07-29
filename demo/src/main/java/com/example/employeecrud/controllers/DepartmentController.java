@@ -15,11 +15,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/department")
 public class DepartmentController {
-    private final String DEPARTMENT_ADDED_SUCCESSFULLY="Department Added successfully";
-    private final String DEPARTMENTS_ADDED_SUCCESSFULLY="Departments Added successfully";
-    private final String DEPARTMENT_FETCHED_SUCCESSFULLY="Department fetched successfully";
-    private final String DEPARTMENTS_FETCHED_SUCCESSFULLY="Department fetched successfully";
-    private final String DEPARTMENT_UPDATED_SUCCESSFULLY="Department updated successfully";
+    public final String DEPARTMENT_ADDED_SUCCESSFULLY="Department Added successfully";
+    public final String DEPARTMENTS_ADDED_SUCCESSFULLY="Departments Added successfully";
+    public final String DEPARTMENT_FETCHED_SUCCESSFULLY="Department fetched successfully";
+    public final String DEPARTMENTS_FETCHED_SUCCESSFULLY="Department fetched successfully";
+    public final String DEPARTMENT_UPDATED_SUCCESSFULLY="Department updated successfully";
     @Autowired
     private DepartmentRepo deptRepo;
     @Autowired

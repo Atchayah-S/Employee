@@ -17,10 +17,10 @@ import java.util.List;
 @Data
 @RequestMapping("/api/Address")
 public class AddressController {
-    private final String ADDRESS_ADDED_SUCCESSFULLY="Address Added successfully";
-    private final String ADDRESS_FETCHED_SUCCESSFULLY="Address fetched successfully";
-    private final String ADDRESS_UPDATED_SUCCESSFULLY="Address updated successfully";
-    private final String ADDRESS_DELETED_SUCCESSFULLY="Address Deleted Successfully";
+    public final String ADDRESS_ADDED_SUCCESSFULLY="Address Added successfully";
+    public final String ADDRESS_FETCHED_SUCCESSFULLY="Address fetched successfully";
+    public final String ADDRESS_UPDATED_SUCCESSFULLY="Address updated successfully";
+    public final String ADDRESS_DELETED_SUCCESSFULLY="Address Deleted Successfully";
     @Autowired
     private JwtUtils jwtUtils;
     @Autowired

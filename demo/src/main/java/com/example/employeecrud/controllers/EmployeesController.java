@@ -16,12 +16,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/Employee")
 public class EmployeesController {
-    private final String EMPLOYEE_ADDED_SUCCESSFULLY="Employee Added successfully";
-    private final String EMPLOYEES_ADDED_SUCCESSFULLY="Employees Added successfully";
-    private final String EMPLOYEE_FETCHED_SUCCESSFULLY="Employee fetched successfully";
-    private final String EMPLOYEES_FETCHED_SUCCESSFULLY="Employee fetched successfully";
-    private final String EMPLOYEE_UPDATED_SUCCESSFULLY="Employee updated successfully";
-    private final String PROJECT_ASSIGNED_SUCCESSFULLY="Project assigned successfully";
+    public final String EMPLOYEE_ADDED_SUCCESSFULLY="Employee Added successfully";
+    public final String EMPLOYEES_ADDED_SUCCESSFULLY="Employees Added successfully";
+    public final String EMPLOYEE_FETCHED_SUCCESSFULLY="Employee fetched successfully";
+    public final String EMPLOYEES_FETCHED_SUCCESSFULLY="Employee fetched successfully";
+    public final String EMPLOYEE_UPDATED_SUCCESSFULLY="Employee updated successfully";
+    public final String PROJECT_ASSIGNED_SUCCESSFULLY="Project assigned successfully";
     @Autowired
     private EmployeesRepo emprepo;
     @Autowired

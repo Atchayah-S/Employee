@@ -22,9 +22,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-    private final String TOKEN_GENERATED_SUCCESSFULLY="Token generated successfully";
-    private final String TOKEN_NOT_GENERATED="Token not generated";
-    private final String TOKEN_NOT_REFRESHED="Token not refreshed";
+    public final String TOKEN_GENERATED_SUCCESSFULLY="Token generated successfully";
+    public final String TOKEN_NOT_GENERATED="Token not generated";
+    public final String TOKEN_NOT_REFRESHED="Token not refreshed";
     @Autowired
     private EmployeesRepo employeesRepo;
     @Autowired
